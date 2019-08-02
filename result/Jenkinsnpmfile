@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+	
+	tools {
+	nodejs 'NodeJA 8.9.0'
+	}
+    
+    stages{
+        stage('build'){
+		
+		when{
+            changeset "**/result/**"
+          }
+		
+            steps {
+                echo 'building result app'
+                dir('result'){
+				sh 'npm install'
+				}
+            }
+        
+        }
+        
+         stage('test'){
+		 
+		 when{
+            changeset "**/result/**"
+          }
+		 
+            steps {
+                echo 'Testing result app'
+                dir('result'){
+				sh 'npm test'
+				}
+            }
+        
+        }
+        
+        
+        
+    }
+    
+    post {
+        always {
+            echo 'this CI/CD pipeline result is now completed'
+			
+        }
+        
+        
+    }
+    
+}
