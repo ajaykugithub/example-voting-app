@@ -18,8 +18,8 @@ pipeline {
         
          stage(two){
             steps {
-                echo 'stage-2 testing'
-                sleep 7
+                echo 'Testing worker app'
+                sh 'mvn clean test'
             }
         
         }
@@ -27,7 +27,7 @@ pipeline {
          stage(three){
             steps {
                 echo 'step3'
-                sleep 5
+                sh 'mvn package'
             }
         
         }
