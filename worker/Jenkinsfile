@@ -19,7 +19,9 @@ pipeline {
          stage(two){
             steps {
                 echo 'Testing worker app'
-                sh 'mvn clean test'
+                dir('worker'){
+				sh 'mvn clean test'
+				}
             }
         
         }
@@ -27,7 +29,9 @@ pipeline {
          stage(three){
             steps {
                 echo 'step3'
-                sh 'mvn package'
+                dir('worker'){
+				sh 'mvn package'
+				}
             }
         
         }
