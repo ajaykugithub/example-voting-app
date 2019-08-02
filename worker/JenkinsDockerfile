@@ -1,0 +1,70 @@
+pipeline {
+    agent {
+	
+	 docker{
+         image 'maven:3.6.1-jdk-8-slim'
+		 }
+	
+	}
+	
+   
+    stages{
+        stage('build'){
+		
+		when{
+            changeset "**/worker/**"
+          }
+		
+            steps {
+                echo 'building worker app'
+                dir('worker'){
+				sh 'mvn compile'
+				}
+            }
+        
+        }
+        
+         stage('test'){
+		 
+		 when{
+            changeset "**/worker/**"
+          }
+		 
+            steps {
+                echo 'Testing worker app'
+                dir('worker'){
+				sh 'mvn clean test'
+				}
+            }
+        
+        }
+        
+         stage('package'){
+		 
+		when{
+          branch 'master'
+          changeset "**/worker/**"
+        }
+		 
+            steps {
+                echo 'step3'
+                dir('worker'){
+				sh 'mvn package -DskipTests'
+				archiveArtifacts artifacts: '**/target/*.jar'
+				}
+            }
+        
+        }
+        
+    }
+    
+    post {
+        always {
+            echo 'this CI/CD pipeline is now completed'
+			
+        }
+        
+        
+    }
+    
+}
