@@ -7,6 +7,11 @@ pipeline {
     
     stages{
         stage('build'){
+		
+		when{
+            changeset "**/worker/**"
+          }
+		
             steps {
                 echo 'building worker app'
                 dir('worker'){
@@ -17,6 +22,11 @@ pipeline {
         }
         
          stage('test'){
+		 
+		 when{
+            changeset "**/worker/**"
+          }
+		 
             steps {
                 echo 'Testing worker app'
                 dir('worker'){
@@ -27,10 +37,17 @@ pipeline {
         }
         
          stage('package'){
+		 
+		when{
+          branch 'master'
+          changeset "**/worker/**"
+        }
+		 
             steps {
                 echo 'step3'
                 dir('worker'){
-				sh 'mvn package'
+				sh 'mvn package -DskipTests'
+				archiveArtifacts artifacts: '**/target/*.jar'
 				}
             }
         
@@ -41,7 +58,7 @@ pipeline {
     post {
         always {
             echo 'this CI/CD pipeline is now completed'
-			archiveArtifacts '**/target/*.jar'
+			
         }
         
         
