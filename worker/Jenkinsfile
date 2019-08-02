@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+	
+	tools {
+	maven 'Maven 3.6.1'
+	}
+    
+    stages{
+        stage('build'){
+            steps {
+                echo 'building worker app'
+                dir('worker'){
+				sh 'mvn compile'
+				}
+            }
+        
+        }
+        
+         stage(two){
+            steps {
+                echo 'stage-2 testing'
+                sleep 7
+            }
+        
+        }
+        
+         stage(three){
+            steps {
+                echo 'step3'
+                sleep 5
+            }
+        
+        }
+        
+    }
+    
+    post {
+        always {
+            echo 'this CI/CD pipeline is now completed'
+        }
+        
+        
+    }
+    
+}
