@@ -37,6 +37,7 @@ pipeline {
     post {
         always {
             echo 'this CI/CD pipeline is now completed'
+			archiveArtifacts '**/target/*.jar'
         }
         
         
